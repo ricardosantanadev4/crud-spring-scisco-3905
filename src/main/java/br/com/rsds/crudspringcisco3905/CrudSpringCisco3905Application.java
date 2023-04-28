@@ -22,9 +22,9 @@ public class CrudSpringCisco3905Application {
 			ramaisRepository.deleteAll();
 			RamaisList ramal = new RamaisList();
 			ramal.setRamal("6001");
-			ramal.setSerialNumber("lzk606789");
-			ramal.setIpCentral("192.168.0.1");
-			ramal.setStatus(RamalStatus.INDIPONIVEL.toString());
+			ramal.setSerialNumber("SEP44ADD9D560B7");
+			ramal.setIpCentral("192.168.0.230");
+			ramal.setStatus(RamalStatus.INDISPONIVEL.toString());
 			ramaisRepository.save(ramal);
 		};
 	}
