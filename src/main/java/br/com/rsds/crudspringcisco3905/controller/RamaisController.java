@@ -37,7 +37,7 @@ public class RamaisController {
 //	}
 
 	@GetMapping
-	public List<RamaisList> listaAlunos(@RequestParam(required = false) @NotNull @NotBlank String serial) {
+	public List<RamaisList> listaAlunos(@RequestParam(required = false) String serial) {
 		System.out.println("listaAlunos");
 		if (serial == null) {
 			System.out.println("sem parametro");
