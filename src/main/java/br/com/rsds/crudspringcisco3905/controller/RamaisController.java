@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rsds.crudspringcisco3905.model.RamaisList;
-import br.com.rsds.crudspringcisco3905.repository.RamaisRepository;
 import br.com.rsds.crudspringcisco3905.serice.RamaisService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -27,35 +26,18 @@ import jakarta.validation.constraints.Positive;
 @Validated
 @RestController
 @RequestMapping("/api/ramais-list")
-//@AllArgsConstructor
 public class RamaisController {
 
-//	private final RamaisRepository ramaisRepository;
 	private final RamaisService ramaisService;
 
 	public RamaisController(RamaisService ramaisService) {
-//		this.ramaisRepository = ramaisRepository;
 		this.ramaisService = ramaisService;
 	}
 
-//	@GetMapping
-//	public List<RamaisList> list() {
-//		List<RamaisList> ramal = ramaisRepository.findAll();
-//		return ramal;
-//	}
-
 	@GetMapping
-	public List<RamaisList> list(@RequestParam(required = false) String serial) {
+	public @ResponseBody List<RamaisList> list(@RequestParam(required = false) String serial) {
 		System.out.println("list");
-		if (serial == null) {
-			System.out.println("sem parametro");
-			List<RamaisList> ramais = ramaisService.list(serial);
-			return ramais;
-		} else {
-			System.out.println("com parametro");
-			List<RamaisList> ramais = ramaisService.list(serial);
-			return ramais;
-		}
+		return ramaisService.list(serial);
 	}
 
 	@GetMapping("/{id}")
@@ -74,7 +56,7 @@ public class RamaisController {
 	@PutMapping("/{id}")
 	public ResponseEntity<RamaisList> Update(@PathVariable @NotNull @Positive Long id,
 			@RequestBody @Valid RamaisList record) {
-		return ramaisService.Update(id, record).map(recordFind -> ResponseEntity.ok(recordFind))
+		return ramaisService.Update(id, record).map(recordFound -> ResponseEntity.ok(recordFound))
 				.orElse(ResponseEntity.notFound().build());
 	}
 

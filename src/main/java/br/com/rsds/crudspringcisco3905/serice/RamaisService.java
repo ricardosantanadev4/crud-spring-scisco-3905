@@ -3,15 +3,10 @@ package br.com.rsds.crudspringcisco3905.serice;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.rsds.crudspringcisco3905.model.RamaisList;
 import br.com.rsds.crudspringcisco3905.repository.RamaisRepository;
@@ -28,39 +23,30 @@ public class RamaisService {
 		this.ramaisRepository = ramaisRepository;
 	}
 
-	@GetMapping
 	public List<RamaisList> list(String serial) {
 		if (serial == null) {
-			List<RamaisList> ramais = ramaisRepository.findAll();
-			return ramais;
-		} else {
-			List<RamaisList> ramais = ramaisRepository.findBySerialNumber(serial);
-			return ramais;
+			return ramaisRepository.findAll();
 		}
+		return ramaisRepository.findBySerialNumber(serial);
 	}
 
-	@GetMapping("/{id}")
 	public Optional<RamaisList> FindById(@PathVariable @NotNull @Positive Long id) {
 		return ramaisRepository.findById(id);
 	}
 
-	@PostMapping
 	public RamaisList create(@Valid RamaisList record) {
 		return this.ramaisRepository.save(record);
 	}
 
-	@PutMapping("/{id}")
-	public Optional<RamaisList> Update(@NotNull @Positive Long id, @Valid RamaisList record) {
-		return ramaisRepository.findById(id).map(recordFind -> {
-			recordFind.setRamal(record.getRamal());
-			recordFind.setSerialNumber(record.getSerialNumber());
-			recordFind.setIpCentral(record.getIpCentral());
-			RamaisList ramal = ramaisRepository.save(recordFind);
-			return ramal;
+	public Optional<RamaisList> Update(@NotNull @Positive Long id, @RequestBody @Valid RamaisList record) {
+		return ramaisRepository.findById(id).map(recordFound -> {
+			recordFound.setRamal(record.getRamal());
+			recordFound.setSerialNumber(record.getSerialNumber());
+			recordFound.setIpCentral(record.getIpCentral());
+			return ramaisRepository.save(recordFound);
 		});
 	}
 
-	@DeleteMapping("/{id}")
 	public Boolean Delete(@PathVariable @NotNull @Positive Long id) {
 		return ramaisRepository.findById(id).map(ramal -> {
 			ramaisRepository.deleteById(id);
