@@ -41,10 +41,8 @@ public class RamaisController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<RamaisList> FindById(@PathVariable @NotNull @Positive Long id) {
-		System.out.println("RamaisList");
-		return ramaisService.FindById(id).map(record -> ResponseEntity.ok().body(record))
-				.orElse(ResponseEntity.notFound().build());
+	public RamaisList FindById(@PathVariable @NotNull @Positive Long id) {
+		return ramaisService.FindById(id);
 	}
 
 	@PostMapping
@@ -54,17 +52,14 @@ public class RamaisController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<RamaisList> Update(@PathVariable @NotNull @Positive Long id,
-			@RequestBody @Valid RamaisList record) {
-		return ramaisService.Update(id, record).map(recordFound -> ResponseEntity.ok(recordFound))
-				.orElse(ResponseEntity.notFound().build());
+	public RamaisList Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid RamaisList record) {
+		return ramaisService.Update(id, record);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> Delete(@PathVariable @NotNull @Positive Long id) {
-		if (ramaisService.Delete(id)) {
-			return ResponseEntity.noContent().<Void>build();
-		}
-		return (ResponseEntity.notFound().build());
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void Delete(@PathVariable @NotNull @Positive Long id) {
+		ramaisService.Delete(id);
+
 	}
 }

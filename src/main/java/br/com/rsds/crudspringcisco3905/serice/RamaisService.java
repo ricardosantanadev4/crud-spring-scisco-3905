@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import br.com.rsds.crudspringcisco3905.exception.RecordNotFoundException;
 import br.com.rsds.crudspringcisco3905.model.RamaisList;
 import br.com.rsds.crudspringcisco3905.repository.RamaisRepository;
 import jakarta.validation.Valid;
@@ -30,27 +31,24 @@ public class RamaisService {
 		return ramaisRepository.findBySerialNumber(serial);
 	}
 
-	public Optional<RamaisList> FindById(@PathVariable @NotNull @Positive Long id) {
-		return ramaisRepository.findById(id);
+	public RamaisList FindById(@PathVariable @NotNull @Positive Long id) {
+		return ramaisRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
 	public RamaisList create(@Valid RamaisList record) {
 		return this.ramaisRepository.save(record);
 	}
 
-	public Optional<RamaisList> Update(@NotNull @Positive Long id, @RequestBody @Valid RamaisList record) {
+	public RamaisList Update(@NotNull @Positive Long id, @RequestBody @Valid RamaisList record) {
 		return ramaisRepository.findById(id).map(recordFound -> {
 			recordFound.setRamal(record.getRamal());
 			recordFound.setSerialNumber(record.getSerialNumber());
 			recordFound.setIpCentral(record.getIpCentral());
 			return ramaisRepository.save(recordFound);
-		});
+		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	public Boolean Delete(@PathVariable @NotNull @Positive Long id) {
-		return ramaisRepository.findById(id).map(ramal -> {
-			ramaisRepository.deleteById(id);
-			return true;
-		}).orElse(false);
+	public RamaisList Delete(@PathVariable @NotNull @Positive Long id) {
+		return ramaisRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 }
