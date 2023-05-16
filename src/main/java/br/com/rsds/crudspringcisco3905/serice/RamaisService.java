@@ -1,7 +1,6 @@
 package br.com.rsds.crudspringcisco3905.serice;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -48,7 +47,7 @@ public class RamaisService {
 		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	public RamaisList Delete(@PathVariable @NotNull @Positive Long id) {
-		return ramaisRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
+	public void Delete(@PathVariable @NotNull @Positive Long id) {
+		ramaisRepository.delete(ramaisRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id)));
 	}
 }
