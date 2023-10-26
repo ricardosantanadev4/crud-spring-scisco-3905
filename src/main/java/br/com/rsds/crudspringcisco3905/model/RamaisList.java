@@ -36,6 +36,12 @@ public class RamaisList {
 
 	@NotBlank
 	@NotNull
+	@Column(length = 100, nullable = false)
+	@Length(min = 1, max = 100)
+	private String passWord;
+
+	@NotBlank
+	@NotNull
 	@Column(length = 15, nullable = false)
 	@Length(min = 7, max = 15)
 	private String ipCentral;

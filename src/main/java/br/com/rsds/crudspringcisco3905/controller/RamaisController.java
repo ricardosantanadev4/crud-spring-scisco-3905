@@ -1,5 +1,6 @@
 package br.com.rsds.crudspringcisco3905.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rsds.crudspringcisco3905.model.RamaisList;
+import br.com.rsds.crudspringcisco3905.persistfilexml.StartCreatePersistFile;
 import br.com.rsds.crudspringcisco3905.serice.RamaisService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -46,8 +48,11 @@ public class RamaisController {
 
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public RamaisList create(@RequestBody @Valid RamaisList record) {
-		return ramaisService.create(record);
+	public RamaisList create(@RequestBody @Valid RamaisList record) throws IOException {
+		RamaisList ramal = ramaisService.create(record);
+		new StartCreatePersistFile().startCreateFile(ramal.getSerialNumber(), ramal.getIpCentral(), ramal.getRamal(),
+				ramal.getPassWord());
+		return ramal;
 	}
 
 	@PutMapping("/{id}")
