@@ -9,7 +9,7 @@ public class CreatePersistFile {
 
 		System.out.printf("Iniciando...");
 
-		FileWriter arq = new FileWriter("d:\\" + nameFile + ".cnf.xml");
+		FileWriter arq = new FileWriter("D:/" + nameFile + ".cnf.xml");
 
 		PrintWriter gravarArq = new PrintWriter(arq);
 

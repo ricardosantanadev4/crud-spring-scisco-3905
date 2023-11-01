@@ -2,6 +2,7 @@ package br.com.rsds.crudspringcisco3905.model;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.com.rsds.crudspringcisco3905.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Entity
@@ -46,10 +46,7 @@ public class RamaisList {
 	@Length(min = 7, max = 15)
 	private String ipCentral;
 
-	@NotBlank
 	@NotNull
 	@Column(name = "STATUS", nullable = false)
-	@Length(min = 10, max = 12)
-	@Pattern(regexp = "DISPONIVEL|INDISPONIVEL")
-	private String status = RamalStatus.INDISPONIVEL.toString();
+	private Status status = Status.INDISPONIVEL;
 }
