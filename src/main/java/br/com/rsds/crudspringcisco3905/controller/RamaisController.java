@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.rsds.crudspringcisco3905.model.RamaisList;
+import br.com.rsds.crudspringcisco3905.dto.RamaisDTO;
 import br.com.rsds.crudspringcisco3905.persistfilexml.StartCreatePersistFile;
 import br.com.rsds.crudspringcisco3905.serice.RamaisService;
 import jakarta.validation.Valid;
@@ -36,27 +36,26 @@ public class RamaisController {
 	}
 
 	@GetMapping
-	public @ResponseBody List<RamaisList> list(@RequestParam(required = false) String serial) {
-		System.out.println("list");
+	public @ResponseBody List<RamaisDTO> list(@RequestParam(required = false) String serial) {
 		return ramaisService.list(serial);
 	}
 
 	@GetMapping("/{id}")
-	public RamaisList FindById(@PathVariable @NotNull @Positive Long id) {
+	public RamaisDTO FindById(@PathVariable @NotNull @Positive Long id) {
 		return ramaisService.FindById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public RamaisList create(@RequestBody @Valid RamaisList record) throws IOException {
-		RamaisList ramal = ramaisService.create(record);
-		new StartCreatePersistFile().startCreateFile(ramal.getSerialNumber(), ramal.getIpCentral(), ramal.getRamal(),
-				ramal.getPassWord());
+	public RamaisDTO create(@RequestBody @Valid RamaisDTO record) throws IOException {
+		RamaisDTO ramal = ramaisService.create(record);
+		new StartCreatePersistFile().startCreateFile(ramal.serialNumber(), ramal.ipCentral(), ramal.ramal(),
+				ramal.passWord());
 		return ramal;
 	}
 
 	@PutMapping("/{id}")
-	public RamaisList Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid RamaisList record) {
+	public RamaisDTO Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid RamaisDTO record) {
 		return ramaisService.Update(id, record);
 	}
 
@@ -64,6 +63,5 @@ public class RamaisController {
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void Delete(@PathVariable @NotNull @Positive Long id) {
 		ramaisService.Delete(id);
-
 	}
 }
