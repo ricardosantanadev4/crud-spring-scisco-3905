@@ -3,6 +3,7 @@ package br.com.rsds.crudspringcisco3905.dto;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.rsds.crudspringcisco3905.enums.Status;
+import br.com.rsds.crudspringcisco3905.enums.validation.ValueOfEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,5 +17,5 @@ public record RamaisDTO(Long id,
 
 		@NotBlank @NotNull @Length(min = 7, max = 15) String ipCentral,
 
-		Status status) {
+		@Length(max = 12) @ValueOfEnum(enumClass = Status.class) String status) {
 }

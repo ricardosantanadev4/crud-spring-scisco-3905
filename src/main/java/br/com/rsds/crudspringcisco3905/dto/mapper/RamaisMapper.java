@@ -13,7 +13,7 @@ public class RamaisMapper {
 		}
 
 		return new RamaisDTO(ramaisList.getId(), ramaisList.getRamal(), ramaisList.getSerialNumber(),
-				ramaisList.getPassWord(), ramaisList.getIpCentral(), ramaisList.getStatus());
+				ramaisList.getPassWord(), ramaisList.getIpCentral(), ramaisList.getStatus().getValue());
 	}
 
 	public RamaisList toEntity(RamaisDTO ramaisDTO) {
