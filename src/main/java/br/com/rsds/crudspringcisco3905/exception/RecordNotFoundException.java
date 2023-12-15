@@ -7,4 +7,8 @@ public class RecordNotFoundException extends RuntimeException {
 	public RecordNotFoundException(Long id) {
 		super("Registro não encontrado com id: " + id);
 	}
+
+	public RecordNotFoundException(String serial) {
+		super("Registro não encontrado com serial: " + serial);
+	}
 }

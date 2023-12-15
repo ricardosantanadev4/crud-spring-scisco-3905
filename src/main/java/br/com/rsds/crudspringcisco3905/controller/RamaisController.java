@@ -1,7 +1,6 @@
 package br.com.rsds.crudspringcisco3905.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -17,12 +16,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.rsds.crudspringcisco3905.dto.PageDTO;
 import br.com.rsds.crudspringcisco3905.dto.RamaisDTO;
 import br.com.rsds.crudspringcisco3905.persistfilexml.StartCreatePersistFile;
 import br.com.rsds.crudspringcisco3905.serice.RamaisService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Validated
 @RestController
@@ -36,13 +38,15 @@ public class RamaisController {
 	}
 
 	@GetMapping
-	public @ResponseBody List<RamaisDTO> list(@RequestParam(required = false) String serial) {
-		return ramaisService.list(serial);
+	public @ResponseBody PageDTO list(@RequestParam(required = false) String serial,
+			@RequestParam(defaultValue = "0") @PositiveOrZero int page,
+			@RequestParam(defaultValue = "10") @Positive @Max(25) int size) {
+		return ramaisService.list(serial, page, size);
 	}
 
 	@GetMapping("/{id}")
-	public RamaisDTO FindById(@PathVariable @NotNull @Positive Long id) {
-		return ramaisService.FindById(id);
+	public RamaisDTO findById(@PathVariable @NotNull @Positive Long id) {
+		return ramaisService.findById(id);
 	}
 
 	@PostMapping

@@ -1,5 +1,7 @@
 package br.com.rsds.crudspringcisco3905.model;
 
+import java.util.Objects;
+
 import org.hibernate.validator.constraints.Length;
 
 import br.com.rsds.crudspringcisco3905.enums.Status;
@@ -15,8 +17,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "RAMAISLIST")
-
+@Table(name = "RamaisList")
 public class RamaisList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -98,5 +99,26 @@ public class RamaisList {
 	public void setStatus(@NotNull Status status) {
 		this.status = status;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, ipCentral, passWord, ramal, serialNumber, status);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RamaisList other = (RamaisList) obj;
+		return Objects.equals(id, other.id) && Objects.equals(ipCentral, other.ipCentral)
+				&& Objects.equals(passWord, other.passWord) && Objects.equals(ramal, other.ramal)
+				&& Objects.equals(serialNumber, other.serialNumber) && status == other.status;
+	}
+	
+	
 
 }
