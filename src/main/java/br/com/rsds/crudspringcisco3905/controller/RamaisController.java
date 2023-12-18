@@ -38,10 +38,10 @@ public class RamaisController {
 	}
 
 	@GetMapping
-	public @ResponseBody PageDTO list(@RequestParam(required = false) String serial,
+	public @ResponseBody PageDTO list(@RequestParam(required = false) String searchTerm,
 			@RequestParam(defaultValue = "0") @PositiveOrZero int page,
 			@RequestParam(defaultValue = "10") @Positive @Max(25) int size) {
-		return ramaisService.list(serial, page, size);
+		return ramaisService.list(searchTerm, page, size);
 	}
 
 	@GetMapping("/{id}")
