@@ -21,6 +21,7 @@ import br.com.rsds.crudspringcisco3905.dto.RamaisDTO;
 import br.com.rsds.crudspringcisco3905.persistfilexml.StartCreatePersistFile;
 import br.com.rsds.crudspringcisco3905.serice.RamaisService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -38,7 +39,19 @@ public class RamaisController {
 		this.ramaisService = ramaisService;
 	}
 
-	@Operation(tags = "/api/ramais-list", summary = "Listar ou filtrar através de uma string", description = "Metodo que retorna uma Page. Se passado uma string no searchTerm, o método retorna uma page com filtro de panação correspodente a string passada no parametro, se não for passado uma string no searchTerm o método retorna uma page com todos os ramais. Caso os parametros page e size não sejam passados, por defull o parametro page sera igual a 0 e o size igual a 10.")
+	@Operation(
+			tags = "/api/ramais-list", 
+			summary = "Listar todos ramais ou filtrar através de uma string", 
+			description = "Metodo que retorna uma Page. Se passado uma string no searchTerm, "
+			+ "o método retorna uma page com filtro de panação correspodente a string passada no parametro, "
+			+ "se não for passado uma string no searchTerm o método retorna uma page com todos os ramais. "
+			+ "Caso os parametros page e size não sejam passados, "
+			+ "por defull o parametro page sera igual a 0 e o size igual a 10.",
+			responses =  @ApiResponse(
+					description = "Sucess", 
+					responseCode = "200"
+					)
+			)
 	@GetMapping
 	public @ResponseBody PageDTO list(@RequestParam(required = false) String searchTerm,
 			@RequestParam(defaultValue = "0") @PositiveOrZero int page,
@@ -46,13 +59,25 @@ public class RamaisController {
 		return ramaisService.list(searchTerm, page, size);
 	}
 
-	@Operation(tags = "/api/ramais-list", summary = "Busca pelo ID", description = "Metodo que busca o ramal pelo ID. O ID é obrigatório e deve ser um número positivo maior que 0.")
+	@Operation(
+			tags = "/api/ramais-list/{id}", 
+			summary = "Buscar pelo ID", 
+			description = "Método que busca o ramal pelo ID. O ID é obrigatório e deve ser um número positivo maior que 0.",
+			responses = @ApiResponse(
+					description = "Sucess", 
+					responseCode = "200"
+					)
+			)
 	@GetMapping("/{id}")
 	public RamaisDTO findById(@PathVariable @NotNull @Positive Long id) {
 		return ramaisService.findById(id);
 	}
 
-	@Operation(tags = "/api/ramais-list", summary = "Criar", description = "Metodo que cria um ramal")
+	@Operation(
+			tags = "/api/ramais-list", 
+			summary = "Criar", 
+			description = "Método que cria um ramal."
+			)
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public RamaisDTO create(@RequestBody @Valid RamaisDTO record) throws IOException {
@@ -62,13 +87,25 @@ public class RamaisController {
 		return ramal;
 	}
 
-	@Operation(tags = "/api/ramais-list", summary = "Editar", description = "Metodo que edita um ramal")
+	@Operation(
+			tags = "/api/ramais-list/{id}", 
+			summary = "Editar", 
+			description = "Método que edita um ramal",
+			responses = @ApiResponse(
+					description = "Sucess", 
+					responseCode = "200"
+							)
+			)
 	@PutMapping("/{id}")
 	public RamaisDTO Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid RamaisDTO record) {
 		return ramaisService.Update(id, record);
 	}
 
-	@Operation(tags = "/api/ramais-list", summary = "Remover", description = "Metodo que remove um ramal")
+	@Operation(
+			tags = "/api/ramais-list/{id}", 
+			summary = "Remover", 
+			description = "Método que remove um ramal"
+			)
 	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void Delete(@PathVariable @NotNull @Positive Long id) {
