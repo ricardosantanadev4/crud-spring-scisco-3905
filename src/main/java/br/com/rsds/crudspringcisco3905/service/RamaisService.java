@@ -1,4 +1,4 @@
-package br.com.rsds.crudspringcisco3905.serice;
+package br.com.rsds.crudspringcisco3905.service;
 
 import java.util.List;
 import java.util.stream.Collectors;

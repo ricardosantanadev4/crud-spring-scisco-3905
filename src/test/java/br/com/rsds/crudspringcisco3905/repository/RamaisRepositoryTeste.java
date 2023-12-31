@@ -34,14 +34,19 @@ class RamaisRepositoryTeste {
 	@DisplayName("Shoud must successfully obtain the ramais from the DB that contain the data passed in the searchTerm "
 			+ "parameter in one of the columns")
 	void searchSucess() {
+//		Arrange
 		String searchTerm = "r1c4";
 		int page = 0;
 		int size = 10;
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
 		RamaisDTO ramalDTO = new RamaisDTO(null, "6001", "LZK6064890DFDR1", "R1c4rd0", "192.168.169.110", null);
 		this.createRamal(ramalDTO);
+
+//		ACT
 		Page<RamaisList> ramalPage = this.ramaisRepository.search(searchTerm.toLowerCase(), pageRequest);
 //		ramalPage.get().forEach(r -> System.out.println(r.getSerialNumber()));
+
+//		Assert
 		assertThat(ramalPage.isEmpty()).isFalse();
 	};
 

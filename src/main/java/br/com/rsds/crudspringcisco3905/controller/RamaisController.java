@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.rsds.crudspringcisco3905.dto.PageDTO;
 import br.com.rsds.crudspringcisco3905.dto.RamaisDTO;
 import br.com.rsds.crudspringcisco3905.persistfilexml.StartCreatePersistFile;
-import br.com.rsds.crudspringcisco3905.serice.RamaisService;
+import br.com.rsds.crudspringcisco3905.service.RamaisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
