@@ -28,7 +28,7 @@ class RamaisRepositoryTeste {
 	private RamaisRepository ramaisRepository;
 
 	@Autowired
-	RamaisMapper ramaisMapper;
+	private RamaisMapper ramaisMapper;
 
 	@Test
 	@DisplayName("Shoud must successfully obtain the ramais from the DB that contain the data passed in the searchTerm "

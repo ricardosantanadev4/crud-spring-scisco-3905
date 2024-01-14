@@ -55,7 +55,17 @@ public class RamaisService {
 	}
 
 	public RamaisDTO create(@Valid RamaisDTO record) {
-		return ramaisMapper.toDto(this.ramaisRepository.save(ramaisMapper.toEntity(record)));
+//		var ramaisList = new RamaisList();
+//		ramaisList.setId(record.id());
+//		ramaisList.setRamal(record.ramal());
+//		ramaisList.setSerialNumber(record.serialNumber());
+//		ramaisList.setPassWord(record.passWord());
+//		ramaisList.setIpCentral(record.ipCentral());
+//		ramaisList.setStatus(ramaisList.getStatus());
+
+//		return ramaisMapper.toDto(this.ramaisRepository.save(ramaisList));
+		
+		return ramaisMapper.toDto(this.ramaisRepository.save(this.ramaisMapper.toEntity(record)));
 	}
 
 	public RamaisDTO Update(@NotNull @Positive Long id, @RequestBody @Valid RamaisDTO record) {

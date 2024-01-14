@@ -17,4 +17,5 @@ public interface RamaisRepository extends JpaRepository<RamaisList, Long> {
 			+ "OR LOWER(c.status) like %:searchTerm%")
 
 	Page<RamaisList> search(@Param("searchTerm") String searchTerm, Pageable pageable);
+
 }
