@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rsds.crudspringcisco3905.dto.PageDTO;
 import br.com.rsds.crudspringcisco3905.dto.RamaisDTO;
-import br.com.rsds.crudspringcisco3905.persistfilexml.StartCreatePersistFile;
 import br.com.rsds.crudspringcisco3905.service.RamaisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -80,11 +79,8 @@ public class RamaisController {
 			)
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public RamaisDTO create(@RequestBody @Valid RamaisDTO record) throws IOException {
-		RamaisDTO ramal = ramaisService.create(record);
-		new StartCreatePersistFile().startCreateFile(ramal.serialNumber(), ramal.ipCentral(), ramal.ramal(),
-				ramal.passWord());
-		return ramal;
+	public RamaisDTO create(@RequestBody @Valid RamaisDTO ramaisDTO) throws IOException {
+		return ramaisService.create(ramaisDTO);
 	}
 
 	@Operation(
@@ -97,8 +93,8 @@ public class RamaisController {
 							)
 			)
 	@PutMapping("/{id}")
-	public RamaisDTO Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid RamaisDTO record) {
-		return ramaisService.Update(id, record);
+	public RamaisDTO Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid RamaisDTO ramaisDTO) {
+		return ramaisService.Update(id, ramaisDTO);
 	}
 
 	@Operation(

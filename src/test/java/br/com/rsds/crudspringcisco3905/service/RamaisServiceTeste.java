@@ -10,6 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -54,7 +55,7 @@ public class RamaisServiceTeste {
 	class create {
 		@Test
 		@DisplayName("should create an ramal with successfully")
-		void shouldCreateRamalWithSuccessfully() {
+		void shouldCreateRamalWithSuccessfully() throws IOException {
 
 			// Arrange
 			var input = new RamaisDTO(1L, "6001", "VBFHDNCEHFFGFJF", "R1c4rd0", "192.168.0.230", "Indisponivel");

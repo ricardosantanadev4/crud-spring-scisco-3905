@@ -1,5 +1,8 @@
 package br.com.rsds.crudspringcisco3905.persistfilexml;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Xml {
 	public String xmlContent() {
 
