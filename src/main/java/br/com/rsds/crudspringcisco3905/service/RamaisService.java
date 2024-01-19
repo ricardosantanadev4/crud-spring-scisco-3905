@@ -105,7 +105,7 @@ public class RamaisService {
 
 		ramaisRepository
 				.delete(getSerial = ramaisRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id)));
-		
+
 		fileManipulator.fileDelete(getSerial.getSerialNumber());
 
 	}

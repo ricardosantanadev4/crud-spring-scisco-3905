@@ -36,6 +36,8 @@ public class FileManipulator {
 
 		System.out.printf("\n Iniciando...");
 
+		this.fileDelete(oldFileName);
+		
 		FileWriter arq = new FileWriter("D:\\" + newFileName + ".cnf.xml");
 
 		PrintWriter gravarArq = new PrintWriter(arq);
@@ -47,9 +49,6 @@ public class FileManipulator {
 		System.out.printf("\n Gerada uma nova atualização do arquivo " + oldFileName + ".cnf.xml Old" + " em D:\\"
 				+ "\n Novo arquivo " + newFileName + ".cnf.xml" + "\n Iniciando a remoção do arquivo anterior " + oldFileName + ".cnf.xml"
 				+ " Old ....");
-
-		this.fileDelete(oldFileName);
-
 	}
 
 	public void fileDelete(String nameFile) {

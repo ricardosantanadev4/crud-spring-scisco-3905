@@ -12,8 +12,8 @@ public class RamaisMapper {
 			return null;
 		}
 
-		return new RamaisDTO(ramaisList.getId(), ramaisList.getRamal(), ramaisList.getSerialNumber(),
-				ramaisList.getPassWord(), ramaisList.getIpCentral(), ramaisList.getStatus().getValue());
+		return new RamaisDTO(ramaisList.getId(), ramaisList.getRamal(), ramaisList.getSerialNumber(), "",
+				ramaisList.getIpCentral(), ramaisList.getStatus().getValue());
 	}
 
 	public RamaisList toEntity(RamaisDTO ramaisDTO) {
