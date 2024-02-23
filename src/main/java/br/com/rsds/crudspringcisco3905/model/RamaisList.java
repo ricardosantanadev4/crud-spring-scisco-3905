@@ -118,7 +118,5 @@ public class RamaisList {
 				&& Objects.equals(passWord, other.passWord) && Objects.equals(ramal, other.ramal)
 				&& Objects.equals(serialNumber, other.serialNumber) && status == other.status;
 	}
-	
-	
 
 }

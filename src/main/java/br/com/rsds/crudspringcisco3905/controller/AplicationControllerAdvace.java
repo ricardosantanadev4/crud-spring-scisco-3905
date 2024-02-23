@@ -19,6 +19,12 @@ public class AplicationControllerAdvace {
 		return ex.getMessage();
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public String IllegalArgumentException(IllegalArgumentException ex) {
+		return ex.getMessage();
+	}
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public String handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {

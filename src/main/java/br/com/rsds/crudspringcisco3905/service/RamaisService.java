@@ -2,6 +2,7 @@ package br.com.rsds.crudspringcisco3905.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -43,47 +44,53 @@ public class RamaisService {
 	public PageDTO list(@RequestParam(required = false) String searchTerm, @RequestParam @PositiveOrZero int page,
 			@RequestParam @Positive @Max(25) int size) {
 		if (searchTerm == null) {
-			Page<RamaisList> ramalPage = ramaisRepository.findAll(PageRequest.of(page, size, Sort.Direction.ASC, "id"));
-			List<RamaisDTO> ramais = ramalPage.get().map(ramaisMapper::toDto).collect(Collectors.toList());
+			Page<RamaisList> ramalPage = this.ramaisRepository
+					.findAll(PageRequest.of(page, size, Sort.Direction.ASC, "id"));
+			List<RamaisDTO> ramais = ramalPage.get().map(this.ramaisMapper::toDto).collect(Collectors.toList());
 			return new PageDTO(ramais, ramalPage.getTotalElements(), ramalPage.getTotalPages());
 		}
 
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
-		Page<RamaisList> ramalPage = ramaisRepository.search(searchTerm.toLowerCase(), pageRequest);
-		List<RamaisDTO> ramais = ramalPage.get().map(ramaisMapper::toDto).collect(Collectors.toList());
+		Page<RamaisList> ramalPage = this.ramaisRepository.search(searchTerm.toLowerCase(), pageRequest);
+		List<RamaisDTO> ramais = ramalPage.get().map(this.ramaisMapper::toDto).collect(Collectors.toList());
 		return new PageDTO(ramais, ramalPage.getTotalElements(), ramalPage.getTotalPages());
 	}
 
 	public RamaisDTO findById(@PathVariable @NotNull @Positive Long id) {
-		return ramaisRepository.findById(id).map(ramaisMapper::toDto)
+		return this.ramaisRepository.findById(id).map(this.ramaisMapper::toDto)
 				.orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
+	public Boolean findByRamal(RamaisDTO ramaisDTO) {
+		Optional<RamaisList> getSerialNumber = this.ramaisRepository.findBySerialNumber(ramaisDTO.serialNumber());
+		Optional<RamaisList> getRamalIpCentral = this.ramaisRepository.findByRamal(ramaisDTO.ramal().toLowerCase(),
+				ramaisDTO.ipCentral());
+
+		if (getSerialNumber.isEmpty() && getRamalIpCentral.isEmpty()) {
+			return true;
+		}
+		throw new IllegalArgumentException("Operação não concluida!\n" + "Cadastro existente na base de dados.\n"
+				+ "Observações:\n"
+				+ "Existe um ramal igual ao fornecido cadastrado na mesma central ou o serial informado já possui cadastro em alguma central.\n"
+				+ "Ação a ser tomada: Edite ou exclua o cadastro existente.\n");
+	}
+
 	public RamaisDTO create(@Valid RamaisDTO ramaisDTO) throws IOException {
-//		RamaisList ramaisList = new RamaisList();
-//		ramaisList.setId(record.id());
-//		ramaisList.setRamal(record.ramal());
-//		ramaisList.setSerialNumber(record.serialNumber());
-//		ramaisList.setPassWord(record.passWord());
-//		ramaisList.setIpCentral(record.ipCentral());
-//		ramaisList.setStatus(ramaisList.getStatus());
+		this.findByRamal(ramaisDTO);
 
-//		return ramaisMapper.toDto(this.ramaisRepository.save(ramaisList));
-
-		fileManipulator.fileCreator(ramaisDTO.serialNumber(), ramaisDTO.ipCentral(), ramaisDTO.ramal(),
+		this.fileManipulator.fileCreator(ramaisDTO.serialNumber(), ramaisDTO.ipCentral(), ramaisDTO.ramal(),
 				ramaisDTO.passWord());
 
-		return ramaisMapper.toDto(this.ramaisRepository.save(this.ramaisMapper.toEntity(ramaisDTO)));
+		return this.ramaisMapper.toDto(this.ramaisRepository.save(this.ramaisMapper.toEntity(ramaisDTO)));
 	}
 
 	public RamaisDTO Update(@NotNull @Positive Long id, @RequestBody @Valid RamaisDTO ramaisDTO) {
-		RamaisDTO output = ramaisRepository.findById(id).map(ramaisList -> {
-
-			String getSerial = ramaisList.getSerialNumber();
+		return this.ramaisRepository.findById(id).map(ramaisList -> {
+			this.findByRamal(ramaisDTO);
 
 			try {
-				fileManipulator.fileEditor(ramaisDTO.serialNumber(), ramaisDTO.ipCentral(), ramaisDTO.ramal(),
-						ramaisDTO.passWord(), getSerial);
+				this.fileManipulator.fileEditor(ramaisDTO.serialNumber(), ramaisDTO.ipCentral(), ramaisDTO.ramal(),
+						ramaisDTO.passWord(), ramaisList.getSerialNumber());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -93,20 +100,18 @@ public class RamaisService {
 			ramaisList.setSerialNumber(ramaisDTO.serialNumber());
 			ramaisList.setIpCentral(ramaisDTO.ipCentral());
 
-			return ramaisMapper.toDto(ramaisRepository.save(ramaisList));
+			return this.ramaisMapper.toDto(ramaisRepository.save(ramaisList));
 		}).orElseThrow(() -> new RecordNotFoundException(id));
-
-		return output;
 	}
 
 	public void Delete(@PathVariable @NotNull @Positive Long id) {
 
 		RamaisList getSerial;
 
-		ramaisRepository
+		this.ramaisRepository
 				.delete(getSerial = ramaisRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id)));
 
-		fileManipulator.fileDelete(getSerial.getSerialNumber());
+		this.fileManipulator.fileDelete(getSerial.getSerialNumber());
 
 	}
 }
