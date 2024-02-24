@@ -61,7 +61,7 @@ public class RamaisService {
 				.orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	public Boolean findByRamal(RamaisDTO ramaisDTO) {
+	public Boolean findByRamalToSave(RamaisDTO ramaisDTO) {
 		Optional<RamaisList> getSerialNumber = this.ramaisRepository.findBySerialNumber(ramaisDTO.serialNumber());
 		Optional<RamaisList> getRamalIpCentral = this.ramaisRepository.findByRamal(ramaisDTO.ramal().toLowerCase(),
 				ramaisDTO.ipCentral());
@@ -70,13 +70,29 @@ public class RamaisService {
 			return true;
 		}
 		throw new IllegalArgumentException("Operação não concluida!\n" + "Cadastro existente na base de dados.\n"
-				+ "Observações:\n"
-				+ "Existe um ramal igual ao fornecido cadastrado na mesma central ou o serial informado já possui cadastro em alguma central.\n"
-				+ "Ação a ser tomada: Edite ou exclua o cadastro existente.\n");
+				+ "Observações:\n" + "Existe um ramal igual ao fornecido cadastrado na mesma central\n"
+				+ "ou o serial informado já possui cadastro em alguma central.\n" + "Ação a ser tomada:\n"
+				+ "Edite ou exclua o cadastro existente.\n");
+	}
+
+	public Boolean findbyRamalToUpdate(Long id, RamaisDTO ramaisDTO) {
+		Optional<RamaisList> getSerialNumber = this.ramaisRepository.findBySerialNumberToUpdate(id,
+				ramaisDTO.serialNumber().toLowerCase());
+
+		Optional<RamaisList> getRamalIpCentral = this.ramaisRepository.findByRamalToUpdate(id,
+				ramaisDTO.ramal().toLowerCase(), ramaisDTO.ipCentral());
+
+		if (getSerialNumber.isEmpty() && getRamalIpCentral.isEmpty()) {
+			return true;
+		}
+		throw new IllegalArgumentException("Operação não concluida!\n" + "Cadastro existente na base de dados.\n"
+				+ "Observações:\n" + "Existe um ramal igual ao fornecido cadastrado na mesma central\n"
+				+ "ou o serial informado já possui cadastro em alguma central.\n" + "Ação a ser tomada:\n"
+				+ "Edite ou exclua o cadastro existente.\n");
 	}
 
 	public RamaisDTO create(@Valid RamaisDTO ramaisDTO) throws IOException {
-		this.findByRamal(ramaisDTO);
+		this.findByRamalToSave(ramaisDTO);
 
 		this.fileManipulator.fileCreator(ramaisDTO.serialNumber(), ramaisDTO.ipCentral(), ramaisDTO.ramal(),
 				ramaisDTO.passWord());
@@ -86,7 +102,7 @@ public class RamaisService {
 
 	public RamaisDTO Update(@NotNull @Positive Long id, @RequestBody @Valid RamaisDTO ramaisDTO) {
 		return this.ramaisRepository.findById(id).map(ramaisList -> {
-			this.findByRamal(ramaisDTO);
+			this.findbyRamalToUpdate(id, ramaisDTO);
 
 			try {
 				this.fileManipulator.fileEditor(ramaisDTO.serialNumber(), ramaisDTO.ipCentral(), ramaisDTO.ramal(),
